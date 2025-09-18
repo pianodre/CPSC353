@@ -12,10 +12,12 @@ serverSocket = socket(AF_INET, SOCK_STREAM)
 # Fill in start - Bind the socket to server address and server port
 # Hint: You need to bind the socket to a specific address and port
 # Use serverSocket.bind() method
+serverSocket.bind(('localhost', 6789))  # Bind to localhost on port 6789
 # Fill in end
 
 # Fill in start - Configure the socket to listen for incoming connections
 # Hint: Use serverSocket.listen() method with appropriate backlog
+serverSocket.listen(1)  # Allow 1 pending connection
 # Fill in end
 
 while True:
