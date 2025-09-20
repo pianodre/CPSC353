@@ -45,11 +45,14 @@ while True:
                     # Hint: Use f.read() to read file content
                     # Fill in end
         
-        # Send one HTTP header line into socket
-        # Fill in start - Send HTTP response header
-        # Hint: Send "HTTP/1.1 200 OK\r\n\r\n" to indicate successful response
-        # Use connectionSocket.send() and encode the string
-        # Fill in end
+        header = (
+            "HTTP/1.1 200 OK\r\n"
+            "Content-Type: text/html; charset=utf-8\r\n"
+            f"Content-Length: {len(outputdata.encode())}\r\n"
+            "Connection: close\r\n"
+            "\r\n"
+        )
+        connectionSocket.send(header.encode())
         
         # Send the content of the requested file to the client
         for i in range(0, len(outputdata)):
@@ -62,15 +65,19 @@ while True:
         
     except IOError:
         # Send response message for file not found (404 error)
-        # Fill in start - Send 404 Not Found response
-        # Hint: Send appropriate HTTP 404 response header and message
-        # Example: "HTTP/1.1 404 Not Found\r\n\r\n<html><body><h1>404 Not Found</h1></body></html>"
-        # Fill in end
-        
+        body = "<html><body><h1>404 Not Found</h1></body></html>"
+        header = (
+            "HTTP/1.1 404 Not Found\r\n"
+            "Content-Type: text/html; charset=utf-8\r\n"
+            f"Content-Length: {len(body.encode())}\r\n"
+            "Connection: close\r\n"
+            "\r\n"
+        )
+        connectionSocket.sendall(header.encode() + body.encode())
+
         # Close client socket
-        # Fill in start - Close the connection socket
-        # Hint: Use connectionSocket.close()
-        # Fill in end
+        connectionSocket.close()
+
 
 # Close server socket and terminate program
 serverSocket.close()
