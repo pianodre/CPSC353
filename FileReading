@@ -1,0 +1,3 @@
+# 4) File Reading — Read requested file content
+with open(filename[1:], 'r', encoding='utf-8', errors='replace') as f:
+    outputdata = f.read()
