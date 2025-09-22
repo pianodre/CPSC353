@@ -1,6 +1,6 @@
 # Web Server Lab - CPSC 353 Networks
 # Student: [Your Name Here]
-# Date: [Date]
+# Date: September 21, 2025
 
 # Import socket module
 from socket import *
@@ -12,7 +12,7 @@ serverSocket = socket(AF_INET, SOCK_STREAM)
 # Fill in start - Bind the socket to server address and server port
 # Hint: You need to bind the socket to a specific address and port
 # Use serverSocket.bind() method
-serverSocket.bind(('localhost', 6789))  # Bind to localhost on port 6789
+serverSocket.bind(('', 6789))  # Bind to all interfaces on port 6789
 # Fill in end
 
 # Fill in start - Configure the socket to listen for incoming connections
@@ -29,21 +29,26 @@ while True:
         # Fill in start - Receive the HTTP request from the client
         # Hint: Use connectionSocket.recv() to receive data
         # Store the received message in a variable
+        raw_message = connectionSocket.recv(1024)
         # Fill in end
         
-        message = # Fill in start - Decode the received message
-                 # Hint: Convert bytes to string using .decode()
-                 # Fill in end
+        message = raw_message.decode()  # Fill in start - Decode the received message
+                                       # Hint: Convert bytes to string using .decode()
+                                       # Fill in end
         
         # Extract the filename from the HTTP request
         filename = message.split()[1]
         
+        # Handle root path by defaulting to HelloWorld.html
+        if filename == '/':
+            filename = '/HelloWorld.html'
+        
         # Open the requested file
         f = open(filename[1:])  # Remove the leading '/' from filename
         
-        outputdata = # Fill in start - Read the content of the file
-                    # Hint: Use f.read() to read file content
-                    # Fill in end
+        outputdata = f.read()  # Fill in start - Read the content of the file
+                                  # Hint: Use f.read() to read file content
+                                  # Fill in end
         
         header = (
             "HTTP/1.1 200 OK\r\n"
@@ -78,17 +83,5 @@ while True:
         # Close client socket
         connectionSocket.close()
 
-# Step 4) File Reading — Read requested file content
-# Paste these lines where your skeleton shows:
-#   outputdata = #Fill in start ...
-#   ...
-#   #Fill in end
-#
-# Assumes `filename` is a path beginning with '/' (e.g., '/index.html').
-
-with open(filename[1:], 'r', encoding='utf-8', errors='replace') as f:
-    outputdata = f.read()
-
-# Close server socket and terminate program
-serverSocket.close()
-sys.exit()  # Terminate the program after sending the corresponding data
+# Note: Server runs indefinitely until manually terminated (Ctrl+C)
+# The serverSocket.close() and sys.exit() would only be reached if the while loop exits
